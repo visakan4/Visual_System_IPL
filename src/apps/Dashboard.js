@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import GroundAnalysis from './GroundAnalysis';
+import PlayerAnalysis from './PlayerAnalysis';
 
 class Dashboard extends Component {
   render() {
     return (
-      <div>This is our dashboard</div>
+      <div>
+        <PlayerAnalysis />
+        <GroundAnalysis />
+      </div>
     );
   }
   
