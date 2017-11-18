@@ -157,7 +157,7 @@ class GroundAnalysis extends Component {
 
 	}
 
-
+	//drawCharts
 	drawCharts(event){
 	    var selectedOption = event.target.options[event.target.selectedIndex];
 	    var index = selectedOption.value;
