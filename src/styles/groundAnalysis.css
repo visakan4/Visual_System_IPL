@@ -1,2 +1,15 @@
-.groundCanvas {
+.grid{
+	float: left;
+}
+
+#container3{
+	text-align: center;
+}
+
+#container1{
+	background-color: grey;
+}
+
+#container2{
+	background-color: blue;
 }
