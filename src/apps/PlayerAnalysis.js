@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import * as d3 from 'd3';
+import Config from '../config.js';
 
-const apiEndpoint = "https://vat-backend.herokuapp.com";
 const margin = { top: 20, right: 20, bottom: 30, left: 50 };
 const width = 600 - margin.left - margin.right;
 const height = 480 - margin.top - margin.bottom;
@@ -17,7 +17,7 @@ class PlayerAnalysis extends Component {
     }
   }
   getOptions(input) {
-    return fetch(`${apiEndpoint}/searchPlayers?query=${input}`)
+    return fetch(`${Config.apiEndpoint}/searchPlayers?query=${input}`)
       .then((response) => {
         return response.json();
       }).then((json) => {
@@ -44,7 +44,7 @@ class PlayerAnalysis extends Component {
   }
   
   getPlayerData() {
-    return fetch(`${apiEndpoint}/playerData?playerId=${this.state.selectedOption.value}`)
+    return fetch(`${Config.apiEndpoint}/playerData?playerId=${this.state.selectedOption.value}`)
   }
   
   renderPlayerGraphs() {
@@ -65,11 +65,10 @@ class PlayerAnalysis extends Component {
       var svg = d3.select("#battingAvg").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
       // format the data
-                debugger;
       json.forEach(function(d) {
         d.season_year = d.season_year;
         d.average = d.average;
