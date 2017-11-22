@@ -3,29 +3,48 @@ import * as d3 from 'd3';
 import $ from 'jquery';
 import Config from '../config.js';
 
-const width = 750;
+const width = 450;
 const height = 300;
 const radius = Math.min(width,height)/2;
-const colors = ["red","blue"];
-const colorBatting = ["yellow","green"];
+const colors = ["#1cbbd0","#c8d85a"];
+const colorBatting = ["#ff2a59","#363c3a"];
 
 class GroundAnalysis extends Component {
   constructor() {
     super();
     this.state = {
-      groundData: [] 
+      selectedGround: 'Select a Ground',
+      groundData: []
     }
   }
 	render() {
   	return (
  		<div id="container">
- 			<div>
- 				<p>Ground Analysis</p>
-				<label htmlFor="groundNames">Ground Name</label>
-				<select id="groundNames" dir="rt1" onChange={ this.drawCharts.bind(this) }></select>
- 			</div>
-  			<div id="container1"></div>
-  			<div id="container2"></div>
+      <div className='row'>
+        <div className="col-6">
+          <h1 className="page-heading">Ground Analysis</h1>
+        </div>
+        <div className="col-6 text-right">
+          <select className="custom-select"
+            id="groundNames"
+            dir="rt1"
+            onChange={ this.drawCharts.bind(this) }
+            >
+            <option default hidden>Select a Ground</option>
+          </select>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col-6">
+          <div id="container1" className="graph-container"></div>
+        </div>
+        <div className="col-6">
+      		<div id="container2" className="graph-container"></div>
+        </div>
+      </div>
+  		
 		</div>
   	);
 	}
@@ -54,7 +73,6 @@ class GroundAnalysis extends Component {
       .append("svg")
       .attr("width",width)
       .attr("height",height)
-      .attr("transform","translate(200,0)")
       .append("g")
       .attr("transform","translate(" + 150 + "," + height/2 +")")
       .attr("class","pieCharts");
@@ -63,7 +81,6 @@ class GroundAnalysis extends Component {
       .append("svg")
       .attr("width",width)
       .attr("height",height)
-      .attr("transform","translate(200,0)")
       .append("g")
       .attr("transform","translate(" + 150 + "," + height/2 +")")
       .attr("class","pieCharts");
@@ -156,6 +173,7 @@ class GroundAnalysis extends Component {
 	//drawCharts
 	drawCharts(event){
     const selectedOption = event.target.options[event.target.selectedIndex];
+    this.setState({selectedGround: selectedOption});
     const index = selectedOption.value;
     const tossarray = [];
     const battingArray = [];

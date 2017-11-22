@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Dancing+Script|Roboto:300,400,700");
 /*!
  * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors
@@ -268,7 +269,7 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
@@ -3655,7 +3656,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -3737,7 +3738,7 @@ button.close {
   display: block;
   max-width: 276px;
   padding: 1px;
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -5986,3 +5987,45 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 @media print {
   .hidden-print {
     display: none !important; } }
+
+body {
+  background: #f9f9f9; }
+  body .page-wrapper {
+    padding-top: 20px; }
+  body .empty-text {
+    padding-top: 160px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 300;
+    color: #a9a9a9; }
+  body .graph-container {
+    background: white;
+    padding: 20px;
+    text-align: center; }
+
+.sidebar-wrapper {
+  background: #00d2ff;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #3a7bd5, #00d2ff);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: white;
+  width: 260px;
+  padding: 15px; }
+  .sidebar-wrapper .logo {
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    padding-top: 30px;
+    padding-bottom: 40px; }
+  .sidebar-wrapper a {
+    color: white;
+    font-weight: 300;
+    text-decoration: none;
+    display: block;
+    padding: 5px 0px; }
+
+.playerCanvas .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1px; }
