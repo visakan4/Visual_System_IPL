@@ -4,6 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import GroundAnalysis from './GroundAnalysis';
 import PlayerAnalysis from './PlayerAnalysis';
+import Cluster from './Cluster';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class Dashboard extends Component {
         <Link to="/">Home</Link>
         <Link to="/groundanalysis">Ground Analysis</Link>
         <Link to="/playeranalysis">Player Analysis</Link>
+        <Link to="/cluster">Cluster</Link>
       </div>
 
     );
@@ -42,6 +44,7 @@ class Dashboard extends Component {
               <Route exact path='/' component={PlayerAnalysis}/>
               <Route path='/groundanalysis' component={GroundAnalysis}/>
               <Route path='/playeranalysis' component={PlayerAnalysis}/>
+              <Route path='/cluster' component={Cluster}/>
             </Switch>
           </div>
         </Sidebar>

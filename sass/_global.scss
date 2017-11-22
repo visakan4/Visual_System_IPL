@@ -16,3 +16,24 @@ body {
     text-align: center;
   }
 }
+
+.axis text {
+  font: 10px sans-serif;
+}
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.axis--x path {
+  display: none;
+}
+.path-line {
+  fill: none;
+  stroke: yellow;
+  stroke-width: 1.5px;
+}
+svg {
+  background: #f0f0f0;
+}
