@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import * as d3 from 'd3';
 import Config from '../config.js';
-import '../styles/playerAnalysis.css';
 
 const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-const width = 600 - margin.left - margin.right;
+const width = 750 - margin.left - margin.right;
 const height = 480 - margin.top - margin.bottom;
 
 class PlayerAnalysis extends Component {
@@ -29,17 +28,34 @@ class PlayerAnalysis extends Component {
   render() {
     return (
       <div id="canvas" className="playerCanvas">
-        <Select.Async
-          name="playerSelect"
-          placeholder="Search a Player"
-          value={this.state.selectedOption}
-          loadOptions={this.getOptions}
-          onChange={(option) => {
-            this.setState({ selectedOption: option });
-          }
-          }
-        />
-        <div id="battingAvg"></div>
+        
+        <div className='row'>
+          <div className="col-6">
+            <h1 className="page-heading">Player Analysis</h1>
+          </div>
+          <div className="col-6">
+            <Select.Async
+              name="playerSelect"
+              placeholder="Search a Player"
+              value={this.state.selectedOption}
+              loadOptions={this.getOptions}
+              onChange={(option) => {
+                this.setState({ selectedOption: option });
+              }}
+            />
+          </div>
+        </div>
+        <hr/>
+        {this.state.selectedOption && this.state.selectedOption.value ? (
+          <div className="row">
+            <div className="col-12">
+              <div id="battingAvg" className="graph-container"></div>
+            </div>
+          </div>
+        ) : (
+          <p className="empty-text">Please select a player from the dropdown at the top</p>
+        )}
+        
       </div>
     );
   }
@@ -52,8 +68,10 @@ class PlayerAnalysis extends Component {
     this.getPlayerData().then((response) => {
       return response.json();
     }).then((json) => {
-      var x = d3.scaleLinear().range([0, width]);
+      var x = d3.scaleTime().range([0, width]);
       var y = d3.scaleLinear().range([height, 0]);
+      
+      var parseTime = d3.timeParse("%d-%b-%y");
 
       // define the line
       var valueline = d3.line()
@@ -63,7 +81,7 @@ class PlayerAnalysis extends Component {
       // append the svg obgect to the body of the page
       // appends a 'group' element to 'svg'
       // moves the 'group' element to the top left margin
-      var svg = d3.select("#battingAvg").append("svg")
+      var svg = d3.select("#battingAvg").html("").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
@@ -71,7 +89,7 @@ class PlayerAnalysis extends Component {
 
       // format the data
       json.forEach(function(d) {
-        d.season_year = d.season_year;
+        d.season_year = parseTime(d.season_year);
         d.average = d.average;
       });
     

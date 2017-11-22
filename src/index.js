@@ -1,9 +1,21 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import './styles/index.css';
+import './styles/main.css';
 import 'react-select/dist/react-select.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import 'jquery/src/jquery';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Bootstrap imports
+const tether = require('tether');
+global.Tether = tether;
+require('bootstrap');
+
+
+ReactDOM.render((
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  ), document.getElementById('root'));
 registerServiceWorker();
