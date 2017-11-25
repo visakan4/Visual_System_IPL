@@ -7,47 +7,38 @@ import PlayerAnalysis from './PlayerAnalysis';
 import Cluster from './Cluster';
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      sidebarOpen: true
-    }
-
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-  }
-
-  onSetSidebarOpen(open) {
-    this.setState({sidebarOpen: open});
-  }
-    
   render() {
-    const sidebarContent = (
-      <div className="sidenav">
-        <h1 className="logo">VAT</h1>
-        <Link to="/">Home</Link>
-        <Link to="/groundanalysis">Ground Analysis</Link>
-        <Link to="/playeranalysis">Player Analysis</Link>
-        <Link to="/cluster">Cluster</Link>
-      </div>
-
-    );
     return (
       <div>
-        <Sidebar sidebar={sidebarContent}
-          open={this.state.sidebarOpen}
-          onSetOpen={this.onSetSidebarOpen}
-          docked={true}
-          sidebarClassName='sidebar-wrapper'>
-          <div className="container-fluid page-wrapper">
-            <Switch>
-              <Route exact path='/' component={PlayerAnalysis}/>
-              <Route path='/groundanalysis' component={GroundAnalysis}/>
-              <Route path='/playeranalysis' component={PlayerAnalysis}/>
-              <Route path='/cluster' component={Cluster}/>
-            </Switch>
+        <nav className="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+          <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          
+          <Link className="navbar-brand" to="/">VAT</Link>
+
+          <div className="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/groundanalysis">Ground Analysis</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/playeranalysis">Player Analysis</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/cluster">Cluster</Link>
+              </li>
+            </ul>
           </div>
-        </Sidebar>
+        </nav>
+        <div className="container-fluid">
+          <Switch>
+            <Route exact path='/' component={PlayerAnalysis}/>
+            <Route path='/groundanalysis' component={GroundAnalysis}/>
+            <Route path='/playeranalysis' component={PlayerAnalysis}/>
+            <Route path='/cluster' component={Cluster}/>
+          </Switch>
+        </div>
       </div>
     );
   }

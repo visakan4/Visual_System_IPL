@@ -5988,8 +5988,17 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   .hidden-print {
     display: none !important; } }
 
+.bg-inverse {
+  background: #00d2ff;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #3a7bd5, #00d2ff);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ }
+
 body {
-  background: #f9f9f9; }
+  background: #f9f9f9;
+  padding-top: 80px; }
   body .page-wrapper {
     padding-top: 20px; }
   body .empty-text {
@@ -6021,29 +6030,7 @@ body {
   stroke-width: 1.5px; }
 
 svg {
-  background: #f0f0f0; }
-
-.sidebar-wrapper {
-  background: #00d2ff;
-  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #3a7bd5, #00d2ff);
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #3a7bd5, #00d2ff);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: white;
-  width: 260px;
-  padding: 15px; }
-  .sidebar-wrapper .logo {
-    text-align: center;
-    font-family: 'Dancing Script', cursive;
-    padding-top: 30px;
-    padding-bottom: 40px; }
-  .sidebar-wrapper a {
-    color: white;
-    font-weight: 300;
-    text-decoration: none;
-    display: block;
-    padding: 5px 0px; }
+  width: 100%; }
 
 .playerCanvas .line {
   fill: none;
