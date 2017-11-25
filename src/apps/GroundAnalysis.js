@@ -85,15 +85,15 @@ class GroundAnalysis extends Component {
       .attr("transform","translate(" + 150 + "," + height/2 +")")
       .attr("class","pieCharts");
 
-    this.arc = d3.arc()
+    this.arc = d3.svg.arc()
       .outerRadius(radius - 10)
       .innerRadius(0);
 
-    this.textArc = d3.arc()
+    this.textArc = d3.svg.arc()
       .outerRadius(radius - 30)
       .innerRadius(radius - 20);
 
-    this.pie = d3.pie().value((d) => d);
+    this.pie = d3.layout.pie().value((d) => d);
 
     this.legend = this.svg1.append('svg')
       .attr("width",250)
