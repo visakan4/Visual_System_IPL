@@ -3,9 +3,9 @@ import Select from 'react-select';
 import * as d3 from 'd3';
 import Config from '../config.js';
 
-const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-const width = 750 - margin.left - margin.right;
-const height = 480 - margin.top - margin.bottom;
+const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+const width = 550 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
 
 const mydata = [{
 	"season_year": "01-Apr-08",
@@ -63,6 +63,7 @@ class PlayerAnalysis extends Component {
       }
     }
   }
+
   getOptions(input) {
     return fetch(`${Config.apiEndpoint}/searchPlayers?query=${input}`)
       .then((response) => {
@@ -95,10 +96,12 @@ class PlayerAnalysis extends Component {
         <hr/>
         {this.state.selectedOption && this.state.selectedOption.value ? (
           <div className="row">
-            <div className="col-12">
+            <div className="col-6">
+              <h5>Batting Average</h5>
               <div id="battingAvg" className="graph-container"></div>
             </div>
-            <div className="col-12">
+            <div className="col-6">
+              <h5>Number of Dismissals</h5>
               <div id="stacked" className="graph-container"></div>
             </div>
           </div>
@@ -143,6 +146,16 @@ class PlayerAnalysis extends Component {
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate("+ -40 +","+(height/2)+")rotate(-90)")
+        .text("Batting Average");
+
+      svg.append("text")
+        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+        .attr("transform", "translate("+ (width/2)  +","+(height-(-40))+")")  // centre below axis
+        .text("Different Seasons (year)");
 
   
       json.forEach(function(d) {
@@ -178,13 +191,8 @@ class PlayerAnalysis extends Component {
   }
 
   renderPlayerStats(config) {
-    // Setup svg using Bostock's margin convention
-
-    var margin = {top: 20, right: 160, bottom: 35, left: 30};
-
-    var width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-
+    const margin = { top: 20, right: 20, bottom: 50, left: 30 };
+    const width = 600;
     var svg = d3.select("#stacked").html("")
       .append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -211,13 +219,13 @@ class PlayerAnalysis extends Component {
     // Set x, y and colors
     var x = d3.scale.ordinal()
       .domain(dataset[0].map(function(d) { return d.x; }))
-      .rangeRoundBands([10, width-10], 0.02);
+      .rangeRoundBands([10, width-160], 0.02);
 
     var y = d3.scale.linear()
       .domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
       .range([height, 0]);
 
-    var colors = ["b33040", "#d25c4d", "#f2b447", "#d9d574"];
+    var colors = ["#b33040", "#d25c4d", "#f2b447"];
 
 
     // Define and draw axes
@@ -239,8 +247,18 @@ class PlayerAnalysis extends Component {
 
     svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(-10," + height + ")")
       .call(xAxis);
+      
+    svg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate("+ -20 +","+(height/2)+")rotate(-90)")
+      .text("Number of times out");
+
+    svg.append("text")
+      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+      .attr("transform", "translate("+ ((width/2) - 90)  +","+(height-(-40))+")")  // centre below axis
+      .text("Different Seasons (year)");
 
 
     // Create groups for each series, rects for each segment 
@@ -250,7 +268,7 @@ class PlayerAnalysis extends Component {
       .attr("class", "cost")
       .style("fill", function(d, i) { return colors[i]; });
 
-    var rect = groups.selectAll("rect")
+    groups.selectAll("rect")
       .data(function(d) { return d; })
       .enter()
       .append("rect")
@@ -267,9 +285,12 @@ class PlayerAnalysis extends Component {
         tooltip.select("text").text(d.y);
       });
 
-
+    var legendContainer = svg.append('g')
+        .attr('class', 'legendContainer')
+        .style('transform', 'translate(-170px, -20px)');
+    
     // Draw legend
-    var legend = svg.selectAll(".legend")
+    var legend = legendContainer.selectAll(".legend")
       .data(colors)
       .enter().append("g")
       .attr("class", "legend")
@@ -288,10 +309,10 @@ class PlayerAnalysis extends Component {
       .style("text-anchor", "start")
       .text(function(d, i) { 
         switch (i) {
-          case 0: return "Anjou pears";
-          case 1: return "Naval oranges";
-          case 2: return "McIntosh apples";
-          case 3: return "Red Delicious apples";
+          case 0: return "Below 10";
+          case 1: return "11-29";
+          case 2: return "Thirty +";
+          default: return "";
         }
       });
 

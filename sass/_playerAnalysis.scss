@@ -4,4 +4,14 @@
     stroke: steelblue;
     stroke-width: 1px;
   }
+  .y.axis {
+    .tick {
+      line {
+        stroke: #e9e9e9;
+      }
+    }
+  }
+  .cost {
+    fill-opacity: 0.8;
+  }
 }
