@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Sidebar from 'react-sidebar';
 import { Switch, Route, Link } from 'react-router-dom';
-import * as d3 from 'd3';
 import GroundAnalysis from './GroundAnalysis';
 import PlayerAnalysis from './PlayerAnalysis';
 import Cluster from './Cluster';
@@ -41,10 +39,6 @@ class Dashboard extends Component {
         </div>
       </div>
     );
-  }
-  
-  componentDidMount() {
-    // Write your d3js code here
   }
 }
 

@@ -8,7 +8,6 @@ const maxRadius = 24;
 
 const colorScale = d3.scale.category20();
 
-const n = 6; // total number of nodes
 const m = 4; // number of distinct clusters
 
 const color = d3.scale.category10()
@@ -18,8 +17,6 @@ const color = d3.scale.category10()
 // The largest node for each cluster.
 const clusters = new Array(m);
 const nodes = [];
-let masterdata;
-
 
 // to align
 const margin = {top: 100	, right: 10, bottom: 20, left: 10};
@@ -48,7 +45,6 @@ class Cluster extends Component {
       const data = BatsmanData;
     	for (var i = 0; i < data.length; i++) {
     		var obj = data[i];
-    		masterdata = data[i];
     		for (var key in obj){
     			var strike_rate = obj['batting_strike_rate'];	// Strike rate
     			var r = strike_rate / 10;		// radius
@@ -160,17 +156,13 @@ class Cluster extends Component {
     // Move d to be adjacent to the cluster node.
     function cluster(alpha) {
       return function(d) {
-   
         var cluster = clusters[d.index];
         if (cluster === d) return;
-        if (cluster === undefined) {
-          debugger;
-        }
         var x = d.x - cluster.x,
             y = d.y - cluster.y,
             l = Math.sqrt(x * x + y * y),
             r = d.radius + cluster.radius;
-        if (l != r) {
+        if (l !== r) {
           l = (l - r) / l * alpha;
           d.x -= x *= l;
           d.y -= y *= l;

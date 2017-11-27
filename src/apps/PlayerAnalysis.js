@@ -149,7 +149,7 @@ class PlayerAnalysis extends Component {
       
       svg.append("text")
         .attr("text-anchor", "middle")
-        .attr("transform", "translate("+ -40 +","+(height/2)+")rotate(-90)")
+        .attr("transform", "translate("+ -35 +","+(height/2)+")rotate(-90)")
         .text("Batting Average");
 
       svg.append("text")
@@ -191,7 +191,7 @@ class PlayerAnalysis extends Component {
   }
 
   renderPlayerStats(config) {
-    const margin = { top: 20, right: 20, bottom: 50, left: 30 };
+    const margin = { top: 20, right: 20, bottom: 50, left: 40 };
     const width = 600;
     var svg = d3.select("#stacked").html("")
       .append("svg")
@@ -247,7 +247,7 @@ class PlayerAnalysis extends Component {
 
     svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(-10," + height + ")")
+      .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
       
     svg.append("text")
