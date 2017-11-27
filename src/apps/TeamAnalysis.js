@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import * as d3 from 'd3';
 
 class TeamAnalysis extends Component {
   render() {
     return (
-      <div id="canvas" className="teamCanvas">Team Analysis Component</div>
+      <iframe title="Team analysis" src="http://visualpearl.azurewebsites.net/VAT/MapPage.html" width = "1200" height= "600" style={{border: 'none'}}></iframe>
     );
-  }
-  
-  componentDidMount() {
-    // Write your d3js code here
   }
 }
 

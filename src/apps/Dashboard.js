@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import GroundAnalysis from './GroundAnalysis';
 import PlayerAnalysis from './PlayerAnalysis';
+import TeamAnalysis from './TeamAnalysis';
 import Cluster from './Cluster';
 
 class Dashboard extends Component {
@@ -26,6 +27,9 @@ class Dashboard extends Component {
               <li className="nav-item">
                 <Link className="nav-link" to="/cluster">Cluster</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/teamanalysis">Team Analysis</Link>
+              </li>
             </ul>
           </div>
         </nav>
@@ -34,6 +38,7 @@ class Dashboard extends Component {
             <Route exact path='/' component={PlayerAnalysis}/>
             <Route path='/groundanalysis' component={GroundAnalysis}/>
             <Route path='/playeranalysis' component={PlayerAnalysis}/>
+            <Route path='/teamanalysis' component={TeamAnalysis}/>
             <Route path='/cluster' component={Cluster}/>
           </Switch>
         </div>
