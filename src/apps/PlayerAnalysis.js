@@ -9,53 +9,6 @@ const margin = { top: 20, right: 20, bottom: 50, left: 50 };
 const width = 550 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
-const mydata = [{
-	"season_year": "01-Apr-08",
-	"below_10_count": 3,
-	"ten_to_thirty_count": 4,
-	"thirty_plus_count": 7
-}, {
-	"season_year": "01-Apr-09",
-	"below_10_count": 3,
-	"ten_to_thirty_count": 6,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-10",
-	"below_10_count": 3,
-	"ten_to_thirty_count": 4,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-11",
-	"below_10_count": 2,
-	"ten_to_thirty_count": 7,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-12",
-	"below_10_count": 4,
-	"ten_to_thirty_count": 9,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-13",
-	"below_10_count": 4,
-	"ten_to_thirty_count": 5,
-	"thirty_plus_count": 7
-}, {
-	"season_year": "01-Apr-14",
-	"below_10_count": 2,
-	"ten_to_thirty_count": 9,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-15",
-	"below_10_count": 4,
-	"ten_to_thirty_count": 9,
-	"thirty_plus_count": 4
-}, {
-	"season_year": "01-Apr-16",
-	"below_10_count": 4,
-	"ten_to_thirty_count": 6,
-	"thirty_plus_count": 2
-}]
-
 class PlayerAnalysis extends Component {
   constructor() {
     super();
