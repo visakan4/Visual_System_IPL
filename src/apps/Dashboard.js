@@ -6,6 +6,7 @@ import TeamAnalysis from './TeamAnalysis';
 import Cluster from './Cluster';
 
 class Dashboard extends Component {
+  
   render() {
     return (
       <div>
@@ -17,17 +18,17 @@ class Dashboard extends Component {
           <Link className="navbar-brand" to="/">VAT</Link>
 
           <div className="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
+            <ul className="navbar-nav ml-auto">
+              <li className={`${window.location.pathname === '/groundanalysis' ? 'active' : ''} nav-item`}>
                 <Link className="nav-link" to="/groundanalysis">Ground Analysis</Link>
               </li>
-              <li className="nav-item">
+              <li className={`${window.location.pathname === '/playeranalysis' ? 'active' : ''} nav-item`}>
                 <Link className="nav-link" to="/playeranalysis">Player Analysis</Link>
               </li>
-              <li className="nav-item">
+              <li className={`${window.location.pathname === '/cluster' ? 'active' : ''} nav-item`}>
                 <Link className="nav-link" to="/cluster">Cluster</Link>
               </li>
-              <li className="nav-item">
+              <li className={`${window.location.pathname === '/teamanalysis' ? 'active' : ''} nav-item`}>
                 <Link className="nav-link" to="/teamanalysis">Team Analysis</Link>
               </li>
             </ul>
