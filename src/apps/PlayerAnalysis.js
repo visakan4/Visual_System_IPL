@@ -60,15 +60,15 @@ class PlayerAnalysis extends Component {
         <hr/>
         {this.state.selectedOption && this.state.selectedOption.value ? (
           <div className="row">
-            <div className="col-6">
+            <div className="col-6 graph-grid">
               <h5>Batting Average</h5>
-              <Loader loaded={this.state.battingAverageLoaded}>
+              <Loader loaded={this.state.battingAverageLoaded} color="#3a7bd5">
                 <div id="battingAvg" className="graph-container"></div>
               </Loader>
             </div>
-            <div className="col-6">
+            <div className="col-6 graph-grid">
               <h5>Number of Dismissals</h5>
-              <Loader loaded={this.state.battingDismallsLoaded}>
+              <Loader loaded={this.state.battingDismallsLoaded} color="#3a7bd5">
                 <div id="stacked" className="graph-container"></div>
               </Loader>
             </div>

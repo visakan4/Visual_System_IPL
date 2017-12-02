@@ -6,6 +6,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+@import url(../../node_modules/react-bootstrap-switch/dist/css/bootstrap3/react-bootstrap-switch.min.css);
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -6032,6 +6033,18 @@ body {
 svg {
   width: 100%; }
 
+.right-5 {
+  margin-right: 5px; }
+
+.right-10 {
+  margin-right: 10px; }
+
+.left-5 {
+  margin-left: 5px; }
+
+.left-10 {
+  margin-left: 10px; }
+
 .navbar-inverse .navbar-nav .nav-item .nav-link {
   color: rgba(255, 255, 255, 0.75);
   font-weight: 300;
@@ -6042,6 +6055,9 @@ svg {
 .navbar-inverse .navbar-nav .nav-item.active .nav-link {
   font-weight: 500;
   color: white; }
+
+.playerCanvas .graph-grid {
+  min-height: 400px; }
 
 .playerCanvas .line {
   fill: none;
