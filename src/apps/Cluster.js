@@ -1,25 +1,14 @@
 import React, { Component } from 'react';
-import * as d3 from 'd3';
-import BatsmanData from './BatsmanData';
 import $ from 'jquery';
+import _ from 'underscore';
 import Switch from 'react-bootstrap-switch';
 import Select from 'react-select';
-import _ from 'underscore';
+import * as d3 from 'd3';
+import Config from '../config.js';
 
 const padding = 1.5; // separation between same-color nodes
 const clusterPadding = 16; // separation between different-color nodes
 const maxRadius = 24;
-
-const colorScale = d3.scale.category20();
-
-const m = 4; // number of distinct clusters
-
-const color = d3.scale.category10()
-    .domain(d3.range(m));
-
-	
-// The largest node for each cluster.
-const clusters = new Array(m);
 
 // to align
 const margin = {top: 100	, right: 10, bottom: 20, left: 10};
@@ -32,8 +21,30 @@ class Cluster extends Component {
   constructor() {
     super();
     this.state = {
-      nodes: []
+      nodes: [],
+      clusterCount: 4,
+      clusterType: 'batting',
+      minBowlerEconomy: 0,
+      maxBowlerEconomy: 100,
+      minBowlingAverage: 0,
+      maxBowlingAverage: 200,
+      minBattingAverage: 0,
+      maxBattingAverage: 200,
+      minStrikeRate: 0,
+      maxStrikeRate: 700
     }
+  }
+  
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value});
+  }
+  
+  clusterSizeChanged(e) {
+    this.setState({
+      clusterCount: e.target.value
+    }, () => {
+      this.renderForceLayout();
+    });
   }
 
   render() {
@@ -46,22 +57,27 @@ class Cluster extends Component {
         </div>
         <div className="row">
           <div className="col-6">
-          	<label className="right-10">Number of clusters:</label>
-          	<select id='cluster' className="custom-select">
-          		<option value="0">2</option>
-          		<option value="1">3</option>
-          		<option value="2">4</option>
-          	</select>
+            <div className="form-group">
+            	<label className="right-10">Number of clusters:</label>
+            	<select id='cluster' value={this.state.clusterCount} onChange={this.clusterSizeChanged.bind(this)} className="custom-select">
+            		<option value="2">2</option>
+            		<option value="3">3</option>
+            		<option value="4">4</option>
+            	</select>
+            </div>
 
             <br />
-            <label className="right-10">Select either bowling or batting data </label>
-          	<Switch
-              onChange={(el, state) => this.handleSwitch(el, state)}
-              name='innings'
-              onText="Batting"
-              offText="Bowling"
-              offColor="primary"
-            />
+            <div className="form-group">
+              <label className="right-10">Select {this.state.clusterType} data </label>
+            	<Switch
+                onChange={(el, state) => this.handleSwitch(el, state)}
+                name='innings'
+                onText="Batting"
+                offText="Bowling"
+                offColor="primary"
+                defaultValue={this.state.clusterType === 'batting'}
+              />
+            </div>
             <br/>
             
           </div>
@@ -73,6 +89,118 @@ class Cluster extends Component {
               onChange={this.searchNode.bind(this)}
             />
           </div>
+          
+          {
+            this.state.clusterType === 'batting' ?
+            (
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-2">
+                    <div className="form-group">
+                      <label>Minimum Strike Rate</label>
+                      <input type="text"
+                        className="form-control"
+                      placeholder="Min. Strike Rate"
+                      name="minStrikeRate"
+                      onChange={this.handleChange.bind(this)}
+                      value={this.state.minStrikeRate} />
+                    </div>
+                  </div>
+                  <div className="col-2">
+                    <div className="form-group">
+                      <label>Maximum Strike Rate</label>
+                      <input type="text"
+                      className="form-control"
+                      placeholder="Max. Strike Rate"
+                      name="maxStrikeRate"
+                      onChange={this.handleChange.bind(this)}
+                      value={this.state.maxStrikeRate}/>
+                    </div>
+                  </div>
+                  <div className="col-2">
+                    <div className="form-group">
+                      <label>Minimum Average</label>
+                      <input type="text" className="form-control"
+                      placeholder="Min. Average"
+                      name="minBattingAverage"
+                      onChange={this.handleChange.bind(this)}
+                      value={this.state.minBattingAverage}/>
+                    </div>
+                  </div>
+                  <div className="col-2">
+                    <div className="form-group">
+                      <label>Minimum Average</label>
+                      <input type="text" className="form-control"
+                      placeholder="Max. Average"
+                      name="maxBattingAverage"
+                      onChange={this.handleChange.bind(this)}
+                      value={this.state.maxBattingAverage}/>
+                    </div>
+                  </div>
+                  <div className="col-2">
+                    <div className="form-group">
+                      <label>&nbsp;</label>
+                      <input type="submit" value="Apply" onClick={this.renderForceLayout.bind(this)} className="btn btn-success form-control"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+            : (
+                <div className="col-12">
+                  <div className="row">
+                    <div className="col-2">
+                      <div className="form-group">
+                        <label>Minimum Economy</label>
+                        <input type="text"
+                          className="form-control"
+                        placeholder="Min. Economy"
+                        name="minBowlerEconomy"
+                        onChange={this.handleChange.bind(this)}
+                        value={this.state.minBowlerEconomy} />
+                      </div>
+                    </div>
+                    <div className="col-2">
+                      <div className="form-group">
+                        <label>Maximum Economy</label>
+                        <input type="text"
+                        className="form-control"
+                        placeholder="Max. Economy"
+                        name="maxBowlerEconomy"
+                        onChange={this.handleChange.bind(this)}
+                        value={this.state.maxBowlerEconomy}/>
+                      </div>
+                    </div>
+                    <div className="col-2">
+                      <div className="form-group">
+                        <label>Minimum Average</label>
+                        <input type="text" className="form-control"
+                        placeholder="Min. Average"
+                        name="minBowlingAverage"
+                        onChange={this.handleChange.bind(this)}
+                        value={this.state.minBowlingAverage}/>
+                      </div>
+                    </div>
+                    <div className="col-2">
+                      <div className="form-group">
+                        <label>Minimum Average</label>
+                        <input type="text" className="form-control"
+                        placeholder="Max. Average"
+                        name="maxBowlingAverage"
+                        onChange={this.handleChange.bind(this)}
+                        value={this.state.maxBowlingAverage}/>
+                      </div>
+                    </div>
+                    <div className="col-2">
+                      <div className="form-group">
+                        <label>&nbsp;</label>
+                        <input type="submit" value="Apply" onClick={this.renderForceLayout.bind(this)} className="btn btn-success form-control"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
         </div>
         <hr/>
         <div id="clusterWrapper" className="graph-containercluster"></div>
@@ -89,9 +217,11 @@ class Cluster extends Component {
   }
 
   handleSwitch(elem, state) {
-    console.log('handleSwitch. elem:', elem);
-    console.log('name:', elem.props.name);
-    console.log('new state:', state);
+    this.setState({
+      clusterType: (state ? 'batting' : 'bowling')
+    }, () => {
+      this.renderForceLayout();
+    });
   }
   
   searchNode(item) {
@@ -109,28 +239,53 @@ class Cluster extends Component {
     }
   }
 
-  componentDidMount() {  
-    const data = BatsmanData;
-  	const nodes = [];
-    for (var i = 0; i < data.length; i++) {
-  		var obj = data[i];
-  		for (var key in obj){
-  			var strike_rate = obj['batting_strike_rate'];	// Strike rate
-  			var r = strike_rate / 10;		// radius
-  			var n = obj['player_name'];		// player name
-  			var div = obj['km_batting_cluster_label'];
-        var batting_average = obj['batting_average'];			// division/group
-  			var d = { cluster: div, radius: r, player_name: n, strike: strike_rate, batting: batting_average };
-  		} 
-  		if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
-  		nodes.push(d);
-  	}
-    this.setState({
-      nodes: nodes
-    }, () => {
-      this.renderCluster();
-      $('[data-toggle="tooltip"]').tooltip();
-    });    
+  renderForceLayout() {
+    this.clusters = new Array(parseInt(this.state.clusterCount, 10));
+    this.color = d3.scale.category10().domain(d3.range(this.state.clusterCount));
+    this.colorScale = d3.scale.category20();
+    let filterOptions = _.extend({}, this.state.clusterType === 'batting' ? {
+      clusterCount: this.state.clusterCount,
+      minBattingAverage: this.state.minBattingAverage,
+      maxBattingAverage: this.state.maxBattingAverage,
+      minStrikeRate: this.state.minStrikeRate,
+      maxStrikeRate:this.state.maxStrikeRate 
+    } : {
+      clusterCount: this.state.clusterCount,
+      minBowlerEconomy: this.state.minBowlerEconomy,
+      maxBowlerEconomy: this.state.maxBowlerEconomy,
+      minBowlingAverage: this.state.minBowlingAverage,
+      maxBowlingAverage: this.state.maxBowlingAverage
+    })
+    fetch(`${Config.apiEndpoint}/${this.state.clusterType}ClusterValues?${$.param(filterOptions)}`).then((response) => {
+      this.setState({ clusterLoaded: true });
+      return response.json();
+    }).then((data) => {
+      const nodes = [];
+      for (var i = 0; i < data.length; i++) {
+    		var obj = data[i];
+    		for (var key in obj){
+          var dynamicParam = obj[`${this.state.clusterType === 'batting' ? 'batting_strike_rate' : 'bowling_economy'}`];	// Strike rate
+    			var r = (this.state.clusterType === 'batting' ? (dynamicParam/10) : (dynamicParam*1.4));		// radius
+    			var n = obj['player_name'];		// player name
+    			var div = obj[`km_${this.state.clusterType}_cluster_label`];
+          var average = obj[`${this.state.clusterType}_average`];			// division/group
+    			var d = { cluster: div, radius: r, player_name: n, dynamicParam: dynamicParam, average: average };
+    		} 
+    		if (!this.clusters[i] || (r > this.clusters[i].radius)) this.clusters[i] = d;
+    		nodes.push(d);
+    	}
+      this.setState({
+        nodes: nodes
+      }, () => {
+        this.renderCluster();
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    });
+  }
+  
+  componentDidMount() {
+    // The largest node for each cluster.
+    this.renderForceLayout(); 
   }
   
   renderCluster() {
@@ -152,7 +307,7 @@ class Cluster extends Component {
       .on("tick", this.tick.bind(this))
       .start();
 
-    const svg = d3.select("#clusterWrapper").append("svg")
+    const svg = d3.select("#clusterWrapper").html('').append("svg")
       .attr("width", width)
       .attr("height", height);
 
@@ -176,16 +331,16 @@ class Cluster extends Component {
     this.node = svg.selectAll("circle")
       .data(this.state.nodes)
       .enter().append("circle")
-      .style("fill", function(d) { return color(d.cluster); })
+      .style("fill", (d) => this.color(d.cluster))
       //testing to round of the circle
       .attr('stroke','black')
       .attr('stroke-width',1)
-      .attr('fill',function (d,i) { return colorScale(i) })
+      .attr('fill', (d,i) => this.colorScale(i))
       .attr('data-toggle', 'tooltip')
       .attr('data-placement', 'top')
       .attr('data-html', 'true')
-      .attr('title', function(d) {
-        return `<div>Player Name: ${d.player_name}<br/>Strike rate: ${d.strike} <br/> Batting Average: ${d.batting}</div>`;
+      .attr('title', (d) => {
+        return `<div>Player Name: ${d.player_name}<br/>${this.state.clusterType === 'batting' ? 'Strike Rate' : 'Bowling Economy'} rate: ${d.dynamicParam} <br/> ${this.state.clusterType} Average: ${d.average}</div>`;
       })
       .call(force.drag);
 
@@ -257,20 +412,23 @@ class Cluster extends Component {
   
   // Move d to be adjacent to the cluster node.
   cluster(alpha) {
+    const clusters = this.clusters;
     return function(d) {
       var cluster = clusters[d.index];
       if (cluster === d) return;
-      var x = d.x - cluster.x,
-          y = d.y - cluster.y,
-          l = Math.sqrt(x * x + y * y),
-          r = d.radius + cluster.radius;
-      if (l !== r) {
-        l = (l - r) / l * alpha;
-        d.x -= x *= l;
-        d.y -= y *= l;
-        cluster.x += x;
-        cluster.y += y;
-      }
+      if(typeof(cluster) !== 'undefined') {
+        var x = d.x - cluster.x,
+            y = d.y - cluster.y,
+            l = Math.sqrt(x * x + y * y),
+            r = d.radius + cluster.radius;
+        if (l !== r) {
+          l = (l - r) / l * alpha;
+          d.x -= x *= l;
+          d.y -= y *= l;
+          cluster.x += x;
+          cluster.y += y;
+        }
+      }      
     };
   }
 }
