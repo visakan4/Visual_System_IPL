@@ -96,11 +96,11 @@ class Cluster extends Component {
   
   searchNode(item) {
     var node = d3.select("body").selectAll("circle");
-    if (item.value == "none") {
+    if (item.value === "none") {
         node.style("stroke", "white").style("stroke-width", "1");
     } else {
       var selected = node.filter(function (d, i) {
-        return d.player_name!= item.value;
+        return d.player_name !== item.value;
       });
       selected.style("opacity", "0");
 		  d3.select("body").selectAll("circle").transition()

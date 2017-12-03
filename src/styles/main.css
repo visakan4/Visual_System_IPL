@@ -6056,6 +6056,9 @@ svg {
   font-weight: 500;
   color: white; }
 
+.Select.Select--single {
+  text-align: left; }
+
 .playerCanvas .graph-grid {
   min-height: 400px; }
 
