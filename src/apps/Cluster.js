@@ -268,11 +268,11 @@ class Cluster extends Component {
       for (var i = 0; i < data.length; i++) {
     		var obj = data[i];
     		for (var key in obj){
+          var average = obj[`${this.state.clusterType}_average`];			// division/group
           var dynamicParam = obj[`${this.state.clusterType === 'batting' ? 'batting_strike_rate' : 'bowling_economy'}`];	// Strike rate
-    			var r = (this.state.clusterType === 'batting' ? (dynamicParam/10) : (dynamicParam*1.4));		// radius
+          var r = (this.state.clusterType === 'batting' ? (average / 2) : (dynamicParam*1.4));		// radius
     			var n = obj['player_name'];		// player name
     			var div = obj[`km_${this.state.clusterType}_cluster_label`];
-          var average = obj[`${this.state.clusterType}_average`];			// division/group
           var d = { cluster: div, radius: r, player_name: n, dynamicParam: dynamicParam, average: average, playerId: obj['player_id'] };
     		} 
     		if (!this.clusters[i] || (r > this.clusters[i].radius)) this.clusters[i] = d;
