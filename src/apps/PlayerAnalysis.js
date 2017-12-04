@@ -4,6 +4,7 @@ import Loader from 'react-loader';
 import * as d3 from 'd3';
 import Config from '../config.js';
 import _ from 'underscore';
+import {withRouter} from "react-router-dom";
 
 const margin = { top: 20, right: 20, bottom: 50, left: 50 };
 const width = 550 - margin.left - margin.right;
@@ -20,10 +21,18 @@ class PlayerAnalysis extends Component {
   }
 
   getOptions(input) {
+    const self = this;
     return fetch(`${Config.apiEndpoint}/searchPlayers?query=${input}`)
       .then((response) => {
         return response.json();
       }).then((json) => {
+        const queryParams = self.getQueryParams();
+        if(queryParams.playerId) {
+          const option = _.findWhere(json, { value: queryParams.playerId });
+          if(option) {
+            this.optionChanged(option);            
+          }
+        }
         return { options: json };
       });
   }
@@ -33,12 +42,19 @@ class PlayerAnalysis extends Component {
   }
   
   optionChanged(option) {
-    this.setState({ battingAverageLoaded: false, battingDismallsLoaded: false, bowlingEconomyLoaded:false, playerWicketcount : false, selectedOption: option }, () => {
-      this.renderPlayerAverageGraph();
-      this.renderPlayerStats();
-      this.renderPlayerEconomyGraph();
-      this.renderPlayerWickets();
-    });
+    if(option) {
+      this.props.history.push({
+        pathname: '/playerAnalysis',
+        search: `?playerId=${option.value}`
+      });
+      this.setState({ battingAverageLoaded: false, battingDismallsLoaded: false, bowlingEconomyLoaded:false, playerWicketcount : false, selectedOption: option }, () => {
+        this.renderPlayerAverageGraph();
+        this.renderPlayerStats();
+        this.renderPlayerEconomyGraph();
+        this.renderPlayerWickets();
+      });
+    }
+    
   }
   
   render() {
@@ -54,7 +70,7 @@ class PlayerAnalysis extends Component {
               name="playerSelect"
               placeholder="Search a Player"
               value={this.state.selectedOption}
-              loadOptions={this.getOptions}
+              loadOptions={this.getOptions.bind(this)}
               onChange={this.optionChanged.bind(this)}
             />
           </div>
@@ -77,13 +93,13 @@ class PlayerAnalysis extends Component {
 	            </div>            
 	          </div>
 	          <div className="row">
-	          	<div className="col-6 graph-grid">
+	          	<div className="col-12 graph-grid">
 	              <h5>Bowling Economy</h5>
 	              <Loader loaded={this.state.bowlingEconomyLoaded} color="#3a7bd5">
 	                <div id="bowlingEconomy" className="graph-container"></div>
 	              </Loader>
 	            </div>
-	            <div className="col-6 graph-grid">
+	            <div className="col-12 graph-grid">
 	              <h5>Wicket</h5>
 	              <Loader loaded={this.state.playerWicketcount} color="#3a7bd5">
 	                <div id="stackedWicket" className="graph-container"></div>
@@ -341,7 +357,10 @@ class PlayerAnalysis extends Component {
       this.setState({ bowlingEconomyLoaded: true });
       return response.json();
     }).then((json) => {
-
+      if (json.length === 0) {
+        d3.select("#bowlingEconomy").html("<p class='text-left'>This player is not a bowler</p>")
+        return;
+      }
     	const margin = {top: 20, right: 20, bottom: 30, left: 50};
       	var width = 600;
       	var height = 300
@@ -425,7 +444,11 @@ class PlayerAnalysis extends Component {
 	      this.setState({ playerWicketcount	: true });
 	      return response.json();
 	    }).then((json) => {
-	    	const margin = { top: 20, right: 20, bottom: 50, left: 40 };
+        if (json.length === 0) {
+          d3.select("#stackedWicket").html("<p class='text-left'>This player is not a bowler</p>");
+          return;
+        }
+        const margin = { top: 20, right: 20, bottom: 50, left: 40 };
 	    	const width = 600;
 	      var keys = ["no_of_wickets_caught", "no_of_wickets_bowled", "no_of_wickets_lbw", "no_of_wickets_caught_and_bowled","no_of_wickets_stumped","no_of_wickets_hitwicket"];
 		  var legendKeys = ["Caught","Bowled","LBW","Caught And Bowled","Stumped","Hitwicket"]
@@ -437,16 +460,11 @@ class PlayerAnalysis extends Component {
 	        			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	      /* Data in strings like it would be if imported from a csv */
-
 	      var data = json; //json;
-
-	      var parse = d3.time.format("%d-%b-%y").parse;
-
-
 	      // Transpose the data into layers
 	      var dataset = d3.layout.stack()(keys.map(function(element) {
 	        return data.map(function(d) {
-	          return {x: parse(d.season_id), y: +d[element]};
+	          return {x: d.season_id, y: +d[element]};
 	        });
 	      }));
 
@@ -503,7 +521,7 @@ class PlayerAnalysis extends Component {
 			    return colors[i]
 			  })
 
-			var rect = groups.selectAll("rect")
+			groups.selectAll("rect")
 			  .data(function(d) { return d; })
 			  .enter()
 			  .append("rect")
@@ -527,7 +545,7 @@ class PlayerAnalysis extends Component {
 			  .enter().append("g")
 			  .attr("class", "legend")
 			  .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
-			 
+
 			legend.append("rect")
 			  .attr("x", width - 18)
 			  .attr("width", 18)
@@ -565,6 +583,12 @@ class PlayerAnalysis extends Component {
 	    });
   	}
 
+  // Referred from http://www.timetler.com/2013/11/14/location-search-split-one-liner/
+  getQueryParams() {
+    return _.object(_.compact(_.map(this.props.location.search.slice(1).split('&'), function(item) {
+      if (item) return item.split('=');
+    })));
+  }
 
   componentDidMount() {
     if (this.state.selectedOption && this.state.selectedOption.value) {      
@@ -576,4 +600,4 @@ class PlayerAnalysis extends Component {
   }
 }
 
-export default PlayerAnalysis;
+export default withRouter(PlayerAnalysis);

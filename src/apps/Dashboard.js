@@ -36,7 +36,7 @@ class Dashboard extends Component {
         </nav>
         <div className="container-fluid">
           <Switch>
-            <Route exact path='/' component={PlayerAnalysis}/>
+            <Route exact path='/' component={TeamAnalysis}/>
             <Route path='/groundanalysis' component={GroundAnalysis}/>
             <Route path='/playeranalysis' component={PlayerAnalysis}/>
             <Route path='/teamanalysis' component={TeamAnalysis}/>

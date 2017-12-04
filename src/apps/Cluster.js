@@ -5,6 +5,7 @@ import Switch from 'react-bootstrap-switch';
 import Select from 'react-select';
 import * as d3 from 'd3';
 import Config from '../config.js';
+import {withRouter} from "react-router-dom";
 
 const padding = 1.5; // separation between same-color nodes
 const clusterPadding = 16; // separation between different-color nodes
@@ -31,7 +32,7 @@ class Cluster extends Component {
       minBattingAverage: 0,
       maxBattingAverage: 200,
       minStrikeRate: 0,
-      maxStrikeRate: 700
+      maxStrikeRate: 300
     }
   }
   
@@ -57,28 +58,32 @@ class Cluster extends Component {
         </div>
         <div className="row">
           <div className="col-6">
-            <div className="form-group">
-            	<label className="right-10">Number of clusters:</label>
-            	<select id='cluster' value={this.state.clusterCount} onChange={this.clusterSizeChanged.bind(this)} className="custom-select">
-            		<option value="2">2</option>
-            		<option value="3">3</option>
-            		<option value="4">4</option>
-            	</select>
+            <div className="row">
+              <div className="col-3">
+                <div className="form-group">
+                	<label className="right-10">Clusters:</label>
+                	<select id='cluster' value={this.state.clusterCount} onChange={this.clusterSizeChanged.bind(this)} className="custom-select">
+                		<option value="2">2</option>
+                		<option value="3">3</option>
+                		<option value="4">4</option>
+                	</select>
+                </div>
+              </div>
+              <div className="col-9">
+                <div className="form-group">
+                  <label className="right-10">Select Batting/Bowling data </label>
+                	<Switch
+                    onChange={(el, state) => this.handleSwitch(el, state)}
+                    name='innings'
+                    onText="Batting"
+                    offText="Bowling"
+                    offColor="primary"
+                    defaultValue={this.state.clusterType === 'batting'}
+                  />
+                </div>
+              </div>
             </div>
 
-            <br />
-            <div className="form-group">
-              <label className="right-10">Select {this.state.clusterType} data </label>
-            	<Switch
-                onChange={(el, state) => this.handleSwitch(el, state)}
-                name='innings'
-                onText="Batting"
-                offText="Bowling"
-                offColor="primary"
-                defaultValue={this.state.clusterType === 'batting'}
-              />
-            </div>
-            <br/>
             
           </div>
           <div className="col-6 text-right">
@@ -242,7 +247,6 @@ class Cluster extends Component {
   renderForceLayout() {
     this.clusters = new Array(parseInt(this.state.clusterCount, 10));
     this.color = d3.scale.category10().domain(d3.range(this.state.clusterCount));
-    this.colorScale = d3.scale.category20();
     let filterOptions = _.extend({}, this.state.clusterType === 'batting' ? {
       clusterCount: this.state.clusterCount,
       minBattingAverage: this.state.minBattingAverage,
@@ -269,7 +273,7 @@ class Cluster extends Component {
     			var n = obj['player_name'];		// player name
     			var div = obj[`km_${this.state.clusterType}_cluster_label`];
           var average = obj[`${this.state.clusterType}_average`];			// division/group
-    			var d = { cluster: div, radius: r, player_name: n, dynamicParam: dynamicParam, average: average };
+          var d = { cluster: div, radius: r, player_name: n, dynamicParam: dynamicParam, average: average, playerId: obj['player_id'] };
     		} 
     		if (!this.clusters[i] || (r > this.clusters[i].radius)) this.clusters[i] = d;
     		nodes.push(d);
@@ -326,6 +330,33 @@ class Cluster extends Component {
         d.fixed = true; 
         force.resume();
       });
+    
+    const legend = svg.append('g')
+      .attr("width",250)
+      .attr("height",200)
+      .attr('transform', 'translate(0,10)');
+    
+  	legend.selectAll('g')
+  		.data(d3.range(this.state.clusterCount))
+  		.enter()
+  		.append('rect')
+  		.attr('x',0)
+  		.attr('y', (d,i) => (i*20) )
+  		.attr('width',10)
+  		.attr('height',10)
+  		.style("fill",(d,i) => this.color(d));
+
+    legend.selectAll('g')
+    	.data(d3.range(this.state.clusterCount))
+    	.enter()
+    	.append('text')
+    	.attr('x',15)
+    	.attr('y',function(d,i){
+    		return (i*20) + 10;
+    	})
+    	.text((d,i) => {
+        return `Group ${i + 1}`;
+    	});
 
 
     this.node = svg.selectAll("circle")
@@ -335,7 +366,6 @@ class Cluster extends Component {
       //testing to round of the circle
       .attr('stroke','black')
       .attr('stroke-width',1)
-      .attr('fill', (d,i) => this.colorScale(i))
       .attr('data-toggle', 'tooltip')
       .attr('data-placement', 'top')
       .attr('data-html', 'true')
@@ -363,6 +393,7 @@ class Cluster extends Component {
       .on('dblclick', function(d) {
         d.fixed = false; 
       })
+      .on("click", (d) => this.navigateToPlayerAnalysis(d.playerId))
       .call(node_drag);
 
     this.node.transition()
@@ -373,7 +404,11 @@ class Cluster extends Component {
         return function(t) { return d.radius = i(t); };
       });
   }
-  
+
+  navigateToPlayerAnalysis(playerId) {
+    this.props.history.push(`/playerAnalysis?playerId=${playerId}`);
+  }
+
   tick(e) {
     this.node
       .each(this.cluster(10 * e.alpha * e.alpha))
@@ -433,4 +468,4 @@ class Cluster extends Component {
   }
 }
 
-export default Cluster;
+export default withRouter(Cluster);
