@@ -16,7 +16,8 @@ class PlayerAnalysis extends Component {
     this.state = {
       selectedOption: {
         label: 'Search a Player'
-      }
+      },
+      playerDetails: {}
     }
   }
 
@@ -40,6 +41,16 @@ class PlayerAnalysis extends Component {
   getInitialState() {
     return { battingAverageLoaded: false, profile: null };
   }
+
+  renderPlayerTable() {
+    fetch(`${Config.apiEndpoint}/playerDetails?playerId=${this.state.selectedOption.value}`).then((response) => {
+      return response.json();
+    }).then((json) => {
+      this.setState({
+        playerDetails: json
+      })
+    });
+  }
   
   optionChanged(option) {
     if(option) {
@@ -48,6 +59,7 @@ class PlayerAnalysis extends Component {
         search: `?playerId=${option.value}`
       });
       this.setState({ battingAverageLoaded: false, battingDismallsLoaded: false, bowlingEconomyLoaded:false, playerWicketcount : false, selectedOption: option }, () => {
+        this.renderPlayerTable();
         this.renderPlayerAverageGraph();
         this.renderPlayerStats();
         this.renderPlayerEconomyGraph();
@@ -78,7 +90,32 @@ class PlayerAnalysis extends Component {
         <hr/>
         {this.state.selectedOption && this.state.selectedOption.value ? (
         	<div>
-	          <div className="row">
+            {this.state.playerDetails ? (
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Player Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Runs scored</th>
+                    <th scope="col">Batting Average</th>
+                    <th scope="col">Bowling Economy</th>
+                    <th scope="col">Country</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">{this.state.playerDetails.name}</th>
+                    <td>{this.state.playerDetails.age}</td>
+                    <td>{this.state.playerDetails.runsScored}</td>
+                    <td>{this.state.playerDetails.average}</td>
+                    <td>{this.state.playerDetails.bowlingEconomy}</td>
+                    <td>{this.state.playerDetails.country}</td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : " "}
+          
+            <div className="row">
 	            <div className="col-6 graph-grid">
 	              <h5>Batting Average</h5>
 	              <Loader loaded={this.state.battingAverageLoaded} color="#3a7bd5">
@@ -125,6 +162,13 @@ class PlayerAnalysis extends Component {
       this.setState({ battingAverageLoaded: true });
       return response.json();
     }).then((json) => {
+      const last = _.last(json);
+      this.setState({
+        playerDetails: _.extend(this.state.playerDetails, {
+          runsScored: last.runs_scored,
+          average: last.average.toFixed(2)
+        })
+      })
       var parseDate = d3.time.format("%d-%b-%y").parse;
 
       // Set the ranges
@@ -359,8 +403,19 @@ class PlayerAnalysis extends Component {
     }).then((json) => {
       if (json.length === 0) {
         d3.select("#bowlingEconomy").html("<p class='text-left'>This player is not a bowler</p>")
+        this.setState({
+          playerDetails: _.extend(this.state.playerDetails, {
+            bowlingEconomy: "NA"
+          })
+        })
         return;
       }
+      const last = _.last(json);
+      this.setState({
+        playerDetails: _.extend(this.state.playerDetails, {
+          bowlingEconomy: last.overall_economy.toFixed(2)
+        })
+      })
     	const margin = {top: 20, right: 20, bottom: 30, left: 50};
       	var width = 600;
       	var height = 300

@@ -1,4 +1,10 @@
 .playerCanvas {
+  .table {
+    margin-bottom: 60px;
+    thead {
+      background: #eee;
+    }
+  }
   .graph-grid {
     min-height: 200px;
     margin-bottom: 60px;

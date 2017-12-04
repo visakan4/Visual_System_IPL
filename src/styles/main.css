@@ -6059,6 +6059,11 @@ svg {
 .Select.Select--single {
   text-align: left; }
 
+.playerCanvas .table {
+  margin-bottom: 60px; }
+  .playerCanvas .table thead {
+    background: #eee; }
+
 .playerCanvas .graph-grid {
   min-height: 200px;
   margin-bottom: 60px; }
