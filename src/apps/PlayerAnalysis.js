@@ -266,7 +266,7 @@ class PlayerAnalysis extends Component {
       // Transpose the data into layers
       var dataset = d3.layout.stack()(keys.map(function(element) {
         return data.map(function(d) {
-          return {x: parse(d.season_year), y: +d[element]};
+          return { x: parse(d.season_year), y: +d[element] };
         });
       }));
 
@@ -364,9 +364,9 @@ class PlayerAnalysis extends Component {
         .style("text-anchor", "start")
         .text(function(d, i) { 
           switch (i) {
-            case 0: return "Below 10";
+            case 0: return "Thirty +";
             case 1: return "11-29";
-            case 2: return "Thirty +";
+            case 2: return "Below 10";
             default: return "";
           }
         });
