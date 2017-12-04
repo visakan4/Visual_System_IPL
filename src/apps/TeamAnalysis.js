@@ -8,7 +8,7 @@ class TeamAnalysis extends Component {
         <hr/>
         <div className="row">
           <div className="col-12">
-            <iframe title="Team analysis" src="https://visualpearl.azurewebsites.net/VAT/MapPage.html" width={window.outerWidth - 30} height= "600" style={{border: 'none'}}></iframe>
+            <iframe title="Team analysis" src="https://visualpearl.azurewebsites.net/others/MapPage.html" width={window.outerWidth - 30} height= "600" style={{border: 'none'}}></iframe>
           </div>
             
           <div className="col-12">
