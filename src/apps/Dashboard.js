@@ -6,7 +6,6 @@ import TeamAnalysis from './TeamAnalysis';
 import Cluster from './Cluster';
 
 class Dashboard extends Component {
-  
   render() {
     return (
       <div>
@@ -14,7 +13,7 @@ class Dashboard extends Component {
           <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
-          
+
           <Link className="navbar-brand" to="/">VAT</Link>
 
           <div className="collapse navbar-collapse" id="navbarsExampleDefault">

@@ -293,6 +293,7 @@ class Cluster extends Component {
   }
   
   renderCluster() {
+    // Code referred from https://bl.ocks.org/newsummit/880d663dba66affaf18226113d34073d
     // Use the pack layout to initialize node positions.
     d3.layout.pack()
     .sort(null)

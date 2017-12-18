@@ -19,6 +19,7 @@ class GroundAnalysis extends Component {
       groundData: []
     }
   }
+  
 	render() {
   	return (
    		<div id="container">
@@ -38,7 +39,6 @@ class GroundAnalysis extends Component {
         </div>
         <hr/>
         
-        
         <div className="row" style={{display: `${this.state.selectedGround && this.state.selectedGround.value ? '' : 'none'}`}}>
           <div className="col-6">
             <div id="container1" className="graph-container"></div>
@@ -51,7 +51,6 @@ class GroundAnalysis extends Component {
         <p className="empty-text" style={{display: `${this.state.selectedGround && this.state.selectedGround.value ? 'none' : ''}`}}>
           Please select a player from the dropdown at the top
         </p>
-        
   		</div>
   	);
 	}
@@ -105,13 +104,13 @@ class GroundAnalysis extends Component {
   		.data(colors)
   		.enter()
   		.append('rect')
-  		.attr('x',0)
-  		.attr('y',function(d,i){
+  		.attr('x', 0)
+  		.attr('y', function(d,i) {
   			return i*20;
   		})
-  		.attr('width',10)
-  		.attr('height',10)
-  		.style("fill",(d,i)=>{
+  		.attr('width', 10)
+  		.attr('height', 10)
+  		.style("fill", (d,i) => {
   			return colors[i];
   		});
 
@@ -119,35 +118,35 @@ class GroundAnalysis extends Component {
     	.data(colors)
     	.enter()
     	.append('text')
-    	.attr('x',15)
-    	.attr('y',function(d,i){
+    	.attr('x', 15)
+    	.attr('y', function(d,i) {
     		return (i*20) + 10;
     	})
-    	.text(function(d,i){
-    		 if(i===0){
+    	.text(function(d,i) {
+    		 if (i===0) {
   	   		return "Win Percentage When Toss won";
     		 }
-    		 else if (i===1){
+    		 else if (i===1) {
     		 	return "Win Percentage When Toss lost";
     		 }
     	});
 
     this.legend1 = svg2.append('g')
-      .attr("width",250)
-      .attr("height",200)
+      .attr("width", 250)
+      .attr("height", 200)
       .attr('transform', 'translate(' + (width - 130) + ',' + (height - 40) + ')');
 
   	this.legend1.selectAll('g')
   		.data(colorBatting)
   		.enter()
   		.append('rect')
-  		.attr('x',0)
-  		.attr('y',function(d,i){
+  		.attr('x', 0)
+  		.attr('y', function(d,i) {
   			return i*20;
   		})
-  		.attr('width',10)
-  		.attr('height',10)
-  		.style("fill",(d,i)=>{
+  		.attr('width', 10)
+  		.attr('height', 10)
+  		.style("fill", (d,i) => {
   			return colorBatting[i];
   		});
 
@@ -155,12 +154,12 @@ class GroundAnalysis extends Component {
     	.data(colorBatting)
     	.enter()
     	.append('text')
-    	.attr('x',15)
-    	.attr('y',function(d,i){
+    	.attr('x', 15)
+    	.attr('y', function(d,i) {
     		return (i*20) + 10;
     	})
-    	.text(function(d,i){
-    		 if(i===0){
+    	.text(function(d,i) {
+    		 if (i===0){
   	   		return "Win Percentage Batting First";
     		 }
     		 else{
@@ -172,12 +171,12 @@ class GroundAnalysis extends Component {
 	//drawCharts
 	drawCharts(event){
     const selectedOption = event.target.options[event.target.selectedIndex];
-    this.setState({selectedGround: selectedOption});
+    this.setState({ selectedGround: selectedOption });
     const index = selectedOption.value;
     const tossarray = [];
     const battingArray = [];
-    tossarray.push(this.state.groundData[index].winPercentageWinningToss,this.state.groundData[index].winPercentageLosingToss);
-    battingArray.push(this.state.groundData[index].winPercentagePlayingFirst,this.state.groundData[index].winPercentagePlayingSecond);
+    tossarray.push(this.state.groundData[index].winPercentageWinningToss, this.state.groundData[index].winPercentageLosingToss);
+    battingArray.push(this.state.groundData[index].winPercentagePlayingFirst, this.state.groundData[index].winPercentagePlayingSecond);
     this.drawTossWinChart(tossarray);
     this.drawBattingFirstChart(battingArray);
 	}
@@ -188,35 +187,35 @@ class GroundAnalysis extends Component {
                   .data(this.pie(data))
                   .enter()
                   .append("g")
-                  .attr("class","arc");
+                  .attr("class", "arc");
 
-    arcs.append("path").attr("d",arc).attr("fill",(d,i)=>{
-        return colors[i];
+    arcs.append("path").attr("d", arc).attr("fill", (d,i) => {
+      return colors[i];
     });
 
     arcs.append("text")
-        .attr("transform",(d)=>{
-        return "translate("+ textArc.centroid(d)+")"})
-        .text(function(d){
+      .attr("transform",(d)=>{
+      return "translate("+ textArc.centroid(d)+")"})
+      .text(function(d) {
         return d.data.toFixed(2) + "%";
-    });
+      });
 	}
 
-
 	drawBattingFirstChart(data, pieChart){
-    const arcs = this.pieChart2.html('').selectAll("arc")
+    const arcs = this.pieChart2.html('')
+                  .selectAll("arc")
                   .data(this.pie(data))
                   .enter()
                   .append("g")
                   .attr("class","arc");
 
-    arcs.append("path").attr("d",arc).attr("fill",(d,i)=>{
+    arcs.append("path").attr("d",arc).attr("fill", (d,i) => {
       return colorBatting[i];
     });
 
-    arcs.append("text").attr("transform",(d)=>{
+    arcs.append("text").attr("transform", (d) => {
       return "translate(" + textArc.centroid(d) + ")"
-    }).text(function(d){
+    }).text(function(d) {
       return d.data.toFixed(2) + "%";
     });
 	}
