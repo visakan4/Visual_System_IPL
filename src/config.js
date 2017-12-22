@@ -1,5 +1,5 @@
 const Config = {
-  apiEndpoint: 'https://vat-backend.herokuapp.com'
+  apiEndpoint: 'https://vat-backend.herokuapp.com',
   // apiEndpoint: 'http://localhost:5000',
 }
 
