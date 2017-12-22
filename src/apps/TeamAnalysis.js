@@ -18,7 +18,7 @@ class TeamAnalysis extends Component {
           </div>
           <div className="col-12">
             <div id="treeWrapper" style={{'text-align': 'center'}}>
-              <iframe title="Team analysis" src="http://visualpearl.azurewebsites.net/VA/treeMap.html" width={window.outerWidth - 30} height= "800" style={divStyle}></iframe>
+              <iframe title="Team analysis" src="https://visualpearl.azurewebsites.net/VA/treeMap.html" width={window.outerWidth - 30} height= "800" style={divStyle}></iframe>
             </div>
           </div>
         </div>
