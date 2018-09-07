@@ -30,7 +30,7 @@ Kaggle Link: https://www.kaggle.com/harsha547/indian-premier-league-csv-dataset/
 
 #### 2) Clone repository
 * make sure git is installed
-* clone the repo from here https://bitbucket.org/visakan4/vat_frontend using `git clone git@bitbucket.org:visakan4/vat_frontend.git`
+* clone the repo from here https://github.com/visakan4/Visual_System_IPL_FrontEnd using `git@github.com:visakan4/Visual_System_IPL_FrontEnd.git`
  
 #### 2) Install Project dependencies
 * run the following command to download the packages `yarn install`
@@ -39,7 +39,6 @@ Kaggle Link: https://www.kaggle.com/harsha547/indian-premier-league-csv-dataset/
 
 #### 3) Connect with backend services
 * To connect with the backend services, just change the `apiEndpoint` in `/src/config.js` to the address where backend server is running (usually it would be localhost:5000/ )
-* To use the backend services deployed to heroku, change the apiEndpoint in `/src/config.js` to https://vat-backend.herokuapp.com
 
 *Note: All the packages in package.json are third party plugins used to support this project.*
 
